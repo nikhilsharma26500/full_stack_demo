@@ -1,0 +1,72 @@
+# Comment
+
+# Key : Value pairs
+app: user-authtication
+port : 9000
+version: 1.7
+
+# Objects
+microservices:
+  app: user-authtication # attribute # string
+  port : 9000 # integer
+  version: 1.7 # float
+  deployed: true # boolean
+  hosted: yes # boolean
+  active: on # boolean
+  lists:
+    - name: user-authentication # list 1 - item 1
+      port: 9000 # list 1 - item 1
+      version: 1.7 # list 1 - item 1
+    - name: user-authentication-2 # list 1 - item 2
+      port: 9001 # list 1 - item 2
+      version: 1.8 # list 1 - item 2
+
+
+# Lists can also be defined as simple arrays without keys
+service: 
+  - service1
+  - service2
+  - service3
+
+# Nested lists
+nested_list:
+  - name: user-authentication 
+    port: 9000
+    version: # As a list with items listed below
+      - 1.0
+      - 1.1
+      - 1.2
+    hosts: ["host1", "host2", "host3"] # As a list with items listed in an array
+
+# Multi-line strings
+multi_line_string: | # The pipe character (|) indicates a block scalar or multi-line string
+  This is a multi-line string.
+  It can span multiple lines.
+  Each line will be preserved as is.
+multi_line_string_2: > # The greater-than sign (>) indicates a folded block scalar or single-line string
+  This is another multi-line string.
+  It will be folded into a single line.
+  Newlines will be replaced with spaces.
+curl_command: |
+  curl -X POST https://example.com/api/v1/resource \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "key1": "value1",
+    "key2": "value2"
+  }'
+
+
+# Using environment variables
+env:
+  - name: NODE_ENV
+    value: production
+  - name: DATABASE_URL
+    value: mysql://user:password@db:3306/mydb
+  - name: API_KEY
+    value: $YOUR_API_KEY
+  - default: {{ env.NODE_ENV | default("development") }} # Placeholder for environment variable
+
+
+--- # Another document separator
+# This is a new document in the same YAML file

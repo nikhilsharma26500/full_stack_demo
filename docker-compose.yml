@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5176:5176"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    networks:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:5001
+    
+  backend:
+    build: ./backend
+    ports:
+      - "5001:5001"  # Changed from 5000:5000 to match the port in index.js
+    environment:
+      - DATABASE_URL=mysql://user:password@db:3306/mydb
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    networks:
+      - backend
+    command: sh -c "npm run start"
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 10
+
+volumes:
+  mysql_data:
+
+networks:
+  backend:
